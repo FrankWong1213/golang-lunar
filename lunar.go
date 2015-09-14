@@ -69,7 +69,7 @@ func Lunar(date string) string {
 
 	for iMonth = 1; iMonth < 13 && offset > 0; iMonth++ {
 		if leapMonth > 0 && iMonth == (leapMonth+1) && !leap {
-			iMonth -= 1
+			iMonth--
 			leap = true
 			daysOfMonth = leapDays(year)
 		} else {
@@ -89,15 +89,15 @@ func Lunar(date string) string {
 			leap = false
 		} else {
 			leap = true
-			iMonth -= 1
-			monCyl -= 1
+			iMonth--
+			monCyl--
 		}
 	}
 
 	if offset < 0 {
 		offset += daysOfMonth
-		iMonth -= 1
-		monCyl -= 1
+		iMonth--
+		monCyl--
 	}
 	month = iMonth
 	day = offset + 1
@@ -115,13 +115,13 @@ func yearDays(y int) int {
 	var i, sum int = 348, 348
 	for i = 0x8000; i > 0x8; i >>= 1 {
 		if (lunarInfo[y-1900] & i) != 0 {
-			sum += 1
+			sum++
 		}
 	}
 	return (sum + leapDays(y))
 }
 func getChinaDayString(day int) string {
-	var n int = day
+	n := day
 	if n%10 == 0 {
 		n = 9
 	} else {
@@ -142,21 +142,18 @@ func leapMonthMethod(y int) int {
 func monthDays(y, m int) int {
 	if (lunarInfo[y-1900] & (0x10000 >> uint(m))) == 0 {
 		return 29
-	} else {
-		return 30
 	}
+	return 30
 }
 
 func leapDays(y int) int {
 	if leapMonthMethod(y) != 0 {
 		if (lunarInfo[y-1900] & 0x10000) != 0 {
 			return 30
-		} else {
-			return 29
 		}
-	} else {
-		return 0
+		return 29
 	}
+	return 0
 }
 
 func cyclicalm(num int) string {
